@@ -8,12 +8,14 @@ import br.com.fiap.postech.soat.techchallenge.adapter.in.web.mapper.ProductRespo
 import br.com.fiap.postech.soat.techchallenge.domain.models.Product;
 import br.com.fiap.postech.soat.techchallenge.domain.models.ProductCategory;
 import br.com.fiap.postech.soat.techchallenge.domain.ports.in.ManageProductUseCase;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +27,7 @@ public class ProductController implements ProductAPI {
     private final ManageProductUseCase useCase;
     private final ProductResponseMapper mapper;
 
+    @Operation(summary = "Product search by ID")
     @Override
     public ResponseEntity<ProductResponse> getProductById(UUID id) {
         Product product = useCase.getProductById(id);
@@ -32,22 +35,31 @@ public class ProductController implements ProductAPI {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Registered product")
     @Override
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductRequest request) {
-        useCase.createProduct(request.name(), request.price(), request.category(), request.description());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> createProduct(CreateProductRequest request) {
+        Product product = useCase.createProduct(request.name(), request.price(), request.category(), request.description(), request.imageUrl());
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
+    @Operation(summary = "Updated product")
     @Override
-    public ResponseEntity<Void> updateProduct(UUID id, @Valid @RequestBody UpdateProductRequest request) {
-        useCase.updateProduct(id, request.name(), request.price(), request.category(), request.description());
+    public ResponseEntity<Void> updateProduct(UUID id, UpdateProductRequest request) {
+        useCase.updateProduct(id, request.name(), request.price(), request.category(), request.description(), request.imageUrl());
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Search all products")
     @Override
     public ResponseEntity<List<ProductResponse>> getProducts(
-            @RequestParam(name = "category", required = false) ProductCategory category,
-            @RequestParam(name = "active", required = false) Boolean active) {
+            ProductCategory category, Boolean active) {
 
         List<Product> products = useCase.getProducts(category, active);
 
@@ -58,20 +70,23 @@ public class ProductController implements ProductAPI {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Delete product")
     @Override
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteProduct(UUID id) {
         useCase.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Enable product")
     @Override
-    public ResponseEntity<Void> activateProduct(@PathVariable UUID id) {
+    public ResponseEntity<Void> activateProduct(UUID id) {
         useCase.activateProduct(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Disable product")
     @Override
-    public ResponseEntity<Void> deactivateProduct(@PathVariable UUID id) {
+    public ResponseEntity<Void> deactivateProduct(UUID id) {
         useCase.deactivateProduct(id);
         return ResponseEntity.noContent().build();
     }

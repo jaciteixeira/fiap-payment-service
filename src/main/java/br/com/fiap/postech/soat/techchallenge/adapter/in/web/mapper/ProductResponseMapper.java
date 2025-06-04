@@ -15,7 +15,8 @@ public interface ProductResponseMapper {
                 product.getName(),
                 product.getPrice(),
                 product.getCategory(),
-                product.getDescription()
+                product.getDescription(),
+                product.getImageUrl()
         );
     }
 }

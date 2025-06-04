@@ -12,6 +12,7 @@ public record UpdateProductRequest(
         @NotNull(message = "{product.price.notnull}")
         @Positive(message = "{product.price.positive}") BigDecimal price,
         @NotNull(message = "{product.category.notnull}") ProductCategory category,
-        String description
+        String description,
+        @NotBlank(message = "{product.imageUrl.notblank}") String imageUrl
 ) {
 }

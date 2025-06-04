@@ -1,31 +1,56 @@
 package br.com.fiap.postech.soat.techchallenge.domain.models;
 
-import br.com.fiap.postech.soat.techchallenge.domain.exceptions.InvalidDescriptionException;
-import br.com.fiap.postech.soat.techchallenge.domain.exceptions.InvalidIdException;
-import br.com.fiap.postech.soat.techchallenge.domain.exceptions.InvalidNameException;
-import br.com.fiap.postech.soat.techchallenge.domain.exceptions.InvalidPriceException;
-import lombok.Getter;
+import br.com.fiap.postech.soat.techchallenge.domain.exceptions.*;
 import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
 public class Product {
+
     private UUID id;
     private String name;
     private BigDecimal price;
     private ProductCategory category;
     private String description;
     private boolean active;
+    private String imageUrl;
 
-    public Product(UUID id, String name, BigDecimal price, ProductCategory category, String description, boolean active) {
+    public Product(UUID id, String name, BigDecimal price, ProductCategory category, String description, boolean active, String imageUrl) {
         this.setId(id);
         this.setName(name);
         this.setPrice(price);
         this.setCategory(category);
         this.setDescription(description);
         this.setActive(active);
+        this.setImageUrl(imageUrl);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     private void setId(UUID id) {
@@ -55,24 +80,26 @@ public class Product {
     }
 
     private void setDescription(String description) {
-        if (StringUtils.isBlank(description)) {
-            throw new InvalidDescriptionException("Product description cannot be empty.");
-        }
-
-        this.description = description.trim();
+        this.description = description != null ? description.trim() : null;
     }
 
     private void setActive(boolean active) {
         this.active = active;
     }
 
-    public Product update(String name, BigDecimal price, ProductCategory category, String description) {
+    private void setImageUrl(String imageUrl) {
+        if (StringUtils.isBlank(imageUrl)) {
+            throw new InvalidImageUrlException("Image URL cannot be empty.");
+        }
+        this.imageUrl = imageUrl;
+    }
+
+    public void update(String name, BigDecimal price, ProductCategory category, String description, String imageUrl) {
         this.setName(name);
         this.setPrice(price);
         this.setCategory(category);
         this.setDescription(description);
-
-        return this;
+        this.setImageUrl(imageUrl);
     }
 
     public void activate() {

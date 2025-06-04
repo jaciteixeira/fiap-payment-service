@@ -6,19 +6,44 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/techchallenge}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:password}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+  flyway:
+    mixed: true
+    clean-disabled: false
+    baseline-on-migrate: true
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+    generate-ddl: true
   messages:
     basename: messages
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${SPRING_KAFKA_GROUP_ID:techchallenge-group}
+      auto-offset-reset: ${SPRING_KAFKA_AUTO_OFFSET_RESET:earliest}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      retries: ${SPRING_KAFKA_PRODUCER_RETRIES:3}
+      properties:
+        request.timeout.ms: ${SPRING_KAFKA_REQUEST_TIMEOUT_MS:1000}
+        delivery.timeout.ms: ${SPRING_KAFKA_DELIVERY_TIMEOUT_MS:1000}
+        max.block.ms: ${SPRING_KAFKA_MAX_BLOCK_MS:1000}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 server:
   port: ${SERVER_PORT:8080}
   servlet:
     context-path: ${SERVER_CONTEXT_PATH:/techchallenge/v1}
+  error:
+    include-binding-errors: never
 
 springdoc:
   api-docs:
@@ -27,3 +52,19 @@ springdoc:
   swagger-ui:
     enabled: ${SWAGGER_ENABLED:true}
     path: ${SWAGGER_UI_PATH:/swagger-ui}
+
+mercado-pago:
+  access-token: APP_USR-1131579974414437-053021-157504008fa8e28304d4b2560b3cf474-2466834857
+  collector-id: 2466834857
+  pos-id: CaixaPOS1
+  notification-url: ${NOTIFICATION_URL:https://f0c2-2804-1b3-aa83-b1ee-5de8-e154-a7d9-6180.ngrok-free.app}
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    br.com.fiap.postech: INFO
+    org.hibernate.SQL: OFF
+    org.hibernate.type.descriptor.sql.BasicBinder: OFF
+    org.apache.kafka.clients: OFF
+    org.apache.kafka.common: OFF

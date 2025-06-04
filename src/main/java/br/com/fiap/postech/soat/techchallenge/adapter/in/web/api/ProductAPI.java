@@ -1,6 +1,7 @@
 package br.com.fiap.postech.soat.techchallenge.adapter.in.web.api;
 
-import br.com.fiap.postech.soat.techchallenge.adapter.in.web.dto.request.*;
+import br.com.fiap.postech.soat.techchallenge.adapter.in.web.dto.request.CreateProductRequest;
+import br.com.fiap.postech.soat.techchallenge.adapter.in.web.dto.request.UpdateProductRequest;
 import br.com.fiap.postech.soat.techchallenge.adapter.in.web.dto.response.ProductResponse;
 import br.com.fiap.postech.soat.techchallenge.domain.models.ProductCategory;
 import jakarta.validation.Valid;
@@ -17,13 +18,13 @@ public interface ProductAPI {
     ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductRequest request);
 
     @PutMapping("/{id}")
-    ResponseEntity<Void> updateProduct(@Valid @PathVariable UUID id, @RequestBody UpdateProductRequest request);
+    ResponseEntity<Void> updateProduct(@PathVariable UUID id, @Valid @RequestBody UpdateProductRequest request);
 
     @GetMapping("/{id}")
     ResponseEntity<ProductResponse> getProductById(@PathVariable UUID id);
 
     @GetMapping
-    ResponseEntity<List<ProductResponse>> getProducts(@RequestParam ProductCategory category, @RequestParam Boolean active);
+    ResponseEntity<List<ProductResponse>> getProducts(@RequestParam(required = false) ProductCategory category, @RequestParam(required = false) Boolean active);
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteProduct(@PathVariable UUID id);

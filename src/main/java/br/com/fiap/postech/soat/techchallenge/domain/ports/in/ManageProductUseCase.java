@@ -10,8 +10,8 @@ import java.util.UUID;
 public interface ManageProductUseCase {
     Product getProductById(UUID productId);
     List<Product> getProducts(ProductCategory category, Boolean active);
-    void createProduct(String name, BigDecimal price, ProductCategory category, String description);
-    void updateProduct(UUID productId, String name, BigDecimal price, ProductCategory category, String description);
+    Product createProduct(String name, BigDecimal price, ProductCategory category, String description, String imageUrl);
+    void updateProduct(UUID productId, String name, BigDecimal price, ProductCategory category, String description, String imageUrl);
     void deleteProduct(UUID productId);
     void activateProduct(UUID productId);
     void deactivateProduct(UUID productId);
