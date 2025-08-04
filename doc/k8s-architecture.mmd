@@ -1,0 +1,36 @@
+graph TD
+    ingress["Ingress"]
+    service_app["Service: app"]
+    deployment_app["Deployment: app"]
+    hpa_app["HPA: app"]
+    configmap_app["ConfigMap: app"]
+    secret_app["Secret: app"]
+    service_db["Service: db"]
+    deployment_db["Deployment: db"]
+    configmap_db["ConfigMap: db"]
+    pvc_db["PVC: db"]
+    service_kafka["Service: kafka"]
+    deployment_kafka["Deployment: kafka"]
+    configmap_kafka["ConfigMap: kafka"]
+    pvc_kafka["PVC: kafka"]
+    service_zookeeper["Service: zookeeper"]
+    deployment_zookeeper["Deployment: zookeeper"]
+    configmap_zookeeper["ConfigMap: zookeeper"]
+    pvc_zookeeper["PVC: zookeeper"]
+    ingress --> service_app
+    service_app --> deployment_app
+    deployment_app --> hpa_app
+    configmap_app --> deployment_app
+    secret_app --> deployment_app
+    deployment_app --> service_db
+    deployment_app --> service_kafka
+    service_db --> deployment_db
+    configmap_db --> deployment_db
+    deployment_db --> pvc_db
+    service_kafka --> deployment_kafka
+    configmap_kafka --> deployment_kafka
+    deployment_kafka --> pvc_kafka
+    deployment_kafka --> service_zookeeper
+    service_zookeeper --> deployment_zookeeper
+    configmap_zookeeper --> deployment_zookeeper
+    deployment_zookeeper --> pvc_zookeeper
