@@ -13,7 +13,6 @@ Consulte a documentação da API e o desenho técnico clicando aqui:
 
 - [Docker](https://www.docker.com/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/) (localmente em Kubernetes)
-- [Docker Compose](https://docs.docker.com/compose/)
 - [Postman](https://www.postman.com/) (opcional, para testes da API)
 
 ---
@@ -34,7 +33,7 @@ Baixe os arquivos da pasta ```src/main/resources/static/collections``` e importe
 Para iniciar **todos os serviços** (PostgreSQL e a API Spring Boot) via Docker Compose:
 
 ```bash
-./.ci/deploy.sh
+./.ci/scripts/deploy.sh
 ```
 
 Isso irá subir os seguintes serviços:
@@ -64,7 +63,7 @@ Isso irá subir o banco na porta `5432`.
 ## 🛑 Parando a aplicação
 
 ```bash
-./.ci/stop.sh
+./.ci/scripts/stop.sh
 ```
 
 
