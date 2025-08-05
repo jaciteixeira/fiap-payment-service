@@ -41,6 +41,13 @@ Isso irá subir os seguintes serviços:
 - **API Spring Boot** na porta `8080`
 - **Flyway** para migrações de banco de dados
 
+### Obs
+**Ao final da execução dos scripts, é necessário executar o comando abaixo (de preferência, em outro terminal) para criar o
+túnel do Minikube, que irá permitir o acesso à API Spring Boot na porta `8080`.**
+```bash
+minikube tunnel --profile postech-cluster
+```
+
 ---
 
 
@@ -77,7 +84,7 @@ Isso irá subir o banco na porta `5432`.
 Com a aplicação rodando, você pode acessar os endpoints no Postman ou navegador:
 
 ```
-http://localhost:8080/products
+http://localhost:8080/techchallenge/v1/products
 ```
 
 ---
