@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Build & Test
-        run: mvn clean verify -Pcoverage sonar:sonar
+        run: mvn clean verify
 
       - name: SonarCloud Scan
         env:
