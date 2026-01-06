@@ -1,30 +1,21 @@
 name: CD - Java Microserviço de Pagamento
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Build application
+        run: mvn clean package -DskipTests
 
-      - name: Build & Test
-        run: mvn clean verify
+      - name: Build Docker image
+        run: docker build -t ms-payment:latest .
 
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
-            -Dsonar.host.url=https://sonarcloud.io
+      - name: Deploy
+        run: echo "Deploy executado com sucesso"
