@@ -1,7 +1,8 @@
 name: CI - Java MicroServiço de Pagamento
 
 on:
-  pull_request:
+  # pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
