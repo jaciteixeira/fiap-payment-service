@@ -131,18 +131,25 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.11</version>
 				<executions>
+					<!-- Prepara o agente JaCoCo antes dos testes -->
 					<execution>
 						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
+					<!-- Gera relatório XML após os testes -->
 					<execution>
 						<id>report</id>
 						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<formats>
+								<format>XML</format>
+							</formats>
+						</configuration>
 					</execution>
 					<!-- FALHA O BUILD SE COVERAGE < 70% -->
 				    <execution>
