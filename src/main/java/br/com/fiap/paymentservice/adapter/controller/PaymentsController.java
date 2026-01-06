@@ -32,7 +32,7 @@ public class PaymentsController implements PaymentAPI {
     @Override
     public ResponseEntity<PagedResult<PaymentResponse>> list(UUID orderId, int page, int limit) {
         PagedResult<Payment> payments = useCase.list(orderId, page, limit);
-        List<PaymentResponse> responses = payments.getContent().stream().map(mapper::toResponse).collect(Collectors.toList());
+        List<PaymentResponse> responses = payments.getContent().stream().map(mapper::toResponse).collect(Stream.toList());
         PagedResult<PaymentResponse> result = new PagedResult<>(responses, payments.getTotalElements(), payments.getPage());
         return ResponseEntity.ok(result);
     }
