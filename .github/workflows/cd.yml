@@ -1,4 +1,4 @@
-name: CI - Java Microserviço de Pagamento
+name: CD - Java Microserviço de Pagamento
 
 on:
   pull_request:
