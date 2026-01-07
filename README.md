@@ -131,3 +131,5 @@ mvn test
 ## 🤝 Contribuição
 
 Sinta-se à vontade para enviar sugestões, melhorias ou abrir issues!
+
+## Testes de branch main protegida
