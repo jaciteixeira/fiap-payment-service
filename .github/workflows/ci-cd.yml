@@ -27,11 +27,25 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          echo "EXECUTANDO SONARQUBE"
           mvn sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml\
+            -Dsonar.qualitygate.wait=true
+      
+      - name: Print Test Coverage
+        run: |
+          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml)
+          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml)
+      
+          TOTAL=$((MISSED + COVERED))
+          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($COVERED/$TOTAL)*100}")
+          
+          echo "--------------------------------------"
+          echo "🧪 Test Coverage: $COVERAGE%"
+          echo "--------------------------------------" 
   cd:
     name: CD - Build Docker & Deploy
     runs-on: ubuntu-latest
