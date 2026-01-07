@@ -22,6 +22,21 @@ jobs:
   
       - name: Build & Test
         run: mvn clean verify
+        
+      - name: Install XML utils
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
+      - name: Print Test Coverage
+        run: |
+          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml)
+          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml)
+      
+          TOTAL=$((MISSED + COVERED))
+          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($COVERED/$TOTAL)*100}")
+          
+          echo "--------------------------------------"
+          echo "🧪 Test Coverage: $COVERAGE%"
+          echo "--------------------------------------" 
   
       - name: Sonar Scan
         env:
@@ -35,17 +50,6 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml\
             -Dsonar.qualitygate.wait=true
       
-      - name: Print Test Coverage
-        run: |
-          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml)
-          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml)
-      
-          TOTAL=$((MISSED + COVERED))
-          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($COVERED/$TOTAL)*100}")
-          
-          echo "--------------------------------------"
-          echo "🧪 Test Coverage: $COVERAGE%"
-          echo "--------------------------------------" 
   cd:
     name: CD - Build Docker & Deploy
     runs-on: ubuntu-latest
