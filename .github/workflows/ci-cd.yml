@@ -28,15 +28,22 @@ jobs:
 
       - name: Print Test Coverage
         run: |
-          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml)
-          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml)
+          # Ler valores e remover espaços
+          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml | xargs)
+          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml | xargs)
       
+          echo "Missed instructions: $MISSED"
+          echo "Covered instructions: $COVERED"
+      
+          # Calcular total
           TOTAL=$((MISSED + COVERED))
+      
+          # Calcular porcentagem com awk
           COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($COVERED/$TOTAL)*100}")
-          
+      
           echo "--------------------------------------"
           echo "🧪 Test Coverage: $COVERAGE%"
-          echo "--------------------------------------" 
+          echo "--------------------------------------"
   
       - name: Sonar Scan
         env:
